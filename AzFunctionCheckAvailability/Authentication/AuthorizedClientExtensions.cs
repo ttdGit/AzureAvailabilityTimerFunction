@@ -2,14 +2,14 @@
 using System;
 using Microsoft.Extensions.Configuration;
 
-namespace AzFunctionCheckAvailability
+namespace AzFunctionCheckAvailability.Authentication
 {
     public static class AuthorizedClientExtensions
     {
 
         public static void AddAuthorizedHttpClient(this IServiceCollection services, string httpClientName)
         {
-            services.AddSingleton<ConfidentialClient>(container =>
+            services.AddSingleton(container =>
             {
                 var config = container.GetRequiredService<IConfiguration>();
                 return new ConfidentialClient(config);
@@ -20,7 +20,7 @@ namespace AzFunctionCheckAvailability
 
         public static void AddAuthorizedHttpClient(this IServiceCollection services, string httpClientName, string baseurl = "")
         {
-            services.AddSingleton<ConfidentialClient>(container =>
+            services.AddSingleton(container =>
             {
                 var config = container.GetRequiredService<IConfiguration>();
                 return new ConfidentialClient(config);

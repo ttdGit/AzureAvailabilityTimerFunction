@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AzFunctionCheckAvailability
+namespace AzFunctionCheckAvailability.Authentication
 {
     public class AuthHeaderHandler : DelegatingHandler
     {

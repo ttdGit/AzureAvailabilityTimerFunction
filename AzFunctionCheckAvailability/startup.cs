@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AzFunctionCheckAvailability;
+using AzFunctionCheckAvailability.Authentication;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,9 +20,8 @@ namespace Fintercept.SwitchCore.Messenger.Acquirer
             FunctionsHostBuilderContext context = builder.GetContext();
 
             builder.ConfigurationBuilder
-                .AddJsonFile(Path.Combine(context.ApplicationRootPath, "endpoints.json"), optional: false, reloadOnChange: true);
             //.AddJsonFile(Path.Combine(context.ApplicationRootPath, $"appsettings.{context.EnvironmentName}.json"), optional: true, reloadOnChange: false)
-            //.AddEnvironmentVariables();
+            .AddEnvironmentVariables();
         }
 
         public override void Configure(IFunctionsHostBuilder builder)

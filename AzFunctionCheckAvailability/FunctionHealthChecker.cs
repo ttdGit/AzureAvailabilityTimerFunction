@@ -15,12 +15,12 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace AzFunctionCheckAvailability
 {
-    public class Function1
+    public class FunctionHealthChecker
     {
         private readonly IConfiguration _configuration;
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public Function1(IConfiguration configuration, IHttpClientFactory httpClient)
+        public FunctionHealthChecker(IConfiguration configuration, IHttpClientFactory httpClient)
         {
             _configuration = configuration;
             _httpClientFactory = httpClient;
@@ -51,22 +51,15 @@ namespace AzFunctionCheckAvailability
             }
             
             string location = Environment.GetEnvironmentVariable("REGION_NAME");
-            
-            //todo extract endpoints from config
-            // Read configuration data
-            //string keyName = "endpoints:entries";
-            //var message = _configuration.GetSection(keyName);
-            //var endpoints = _configuration.GetSection(keyName).Get<FunctionSettings>();
-            //_array = _configuration.GetSection("array").Get<ArrayExample>();
 
-            List<string> endpoints = new List<string>();
-            endpoints.Add("https://www.google.com");
-            
+            // Read configuration data
+            var endpoints = new List<EndpointSetting>();
+            _configuration.GetSection("Endpoints").Bind(endpoints);
 
             foreach (var ep in endpoints)
             {
                 //string testName = executionContext.FunctionName;
-                string testName = ep;
+                string testName = ep.EndpointName;
                 var availability = new AvailabilityTelemetry
                 {
                     Name = testName,
@@ -88,7 +81,7 @@ namespace AzFunctionCheckAvailability
                         availability.Id = Activity.Current.SpanId.ToString();
                         // Run business logic 
                         var _httpClient = _httpClientFactory.CreateClient("AuthHttpClient");
-                        await RunAvailabilityTestAsync(_httpClient, ep, log);
+                        await RunAvailabilityTestAsync(_httpClient, ep.EndpointUrl, log);
                     }
                     availability.Success = true;
                 }

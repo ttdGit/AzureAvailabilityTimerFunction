@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AzFunctionCheckAvailability
+namespace AzFunctionCheckAvailability.Authentication
 {
     public class ConfidentialClient
     {
@@ -17,7 +17,7 @@ namespace AzFunctionCheckAvailability
 
         public IConfidentialClientApplication ClientApp { get; }
 
-        private string[]? Scopes;
+        private string[] Scopes;
 
         public ConfidentialClient(IConfiguration configuration)
         {
@@ -43,7 +43,7 @@ namespace AzFunctionCheckAvailability
         {
             // client credentials flows scope is the shape "resource/.default"
             // application permissions need to be set statically by a tenant administrator            
-            AuthenticationResult? result = null;
+            AuthenticationResult result = null;
             result = await ClientApp.AcquireTokenForClient(Scopes).ExecuteAsync();
             return result.AccessToken;
         }
